@@ -1,0 +1,24 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: nginx-deploy
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nginx
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      containers:
+      - name: nginx-with-azure-disk
+        image: nginx:latest
+        volumeMounts:
+        - mountPath: "/data"
+          name: datavolume
+      volumes:
+        - name: datavolume
+          persistentVolumeClaim:
+            claimName: azure-managed-disk-pvc
